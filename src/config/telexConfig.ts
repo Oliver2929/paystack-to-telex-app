@@ -1,30 +1,29 @@
 export const telexAppData = {
   data: {
     date: {
-      created_at: "2025-02-17",
-      updated_at: "2025-02-17",
+      created_at: "2025-02-18",
+      updated_at: "2025-02-18",
     },
     descriptions: {
-      app_name: "telex-paystack-payment ",
+      app_name: "telex-paystack-notification",
       app_description:
-        "A  telex feature that entails getting notifications on revenue reports, chargebacks and chargebacks",
-      app_logo: "http://ec2-54-163-5-31.compute-1.amazonaws.com",
-      app_url: "http://ec2-54-163-5-31.compute-1.amazonaws.com",
+        "A  telex feature that entails getting notifications on revenue reports, chargebacks and failed payments",
+      app_logo: "https://paystack-to-telex-app.onrender.com",
+      app_url: "https://paystack-to-telex-app.onrender.com",
       background_color: "#fff",
     },
     is_active: true,
     integration_type: "interval",
     key_features: [
-      "real time updates on revenue reports",
-      "chargebacks and failed payments",
+      "real time updates on revenue reports. chargebacks and failed payments",
     ],
     author: "Ademola",
     settings: [
       {
-        label: "slack-channel",
+        label: "telex-channel",
         type: "text",
         required: true,
-        default: "payments-alerts",
+        default: "transaction-alerts",
       },
       {
         label: "time interval",
@@ -43,7 +42,7 @@ export const telexAppData = {
         type: "dropdown",
         required: true,
         default: "revenue-reports",
-        options: ["revenue-reports", "chargebacks", "chargebacks"],
+        options: ["revenue-reports", "chargebacks", "failed-payments"],
       },
       {
         label: "message",
@@ -57,8 +56,16 @@ export const telexAppData = {
         required: true,
         default: "true",
       },
+      {
+        label: "uptime-check-url",
+        type: "text",
+        required: true,
+        default:
+          "https://paystack-to-telex-app.onrender.com/initiate-uptime-check",
+      },
     ],
-    target_url: "https://paystack-url-webhook.onrender.com",
-    tick_url: "http://ec2-54-163-5-31.compute-1.amazonaws.com/telex-webhook",
+    target_url: "https://paystack-url-webhook.onrender.com/paystack-webhook",
+    tick_url:
+      "https://paystack-to-telex-app.onrender.com/initiate-uptime-check",
   },
 };
