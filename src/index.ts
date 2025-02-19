@@ -68,6 +68,7 @@ app.get("/integration.json", (req: Request, res: Response) => {
       key_features: [
         "real time updates on revenue reports. chargebacks and failed payments",
       ],
+      Category: "Finance & Payments",
       author: "Ademola",
       settings: [
         {
