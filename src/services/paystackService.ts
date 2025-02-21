@@ -1,43 +1,40 @@
 import axios from "axios";
-import { PAYSTACK_SECRET_KEY } from "../config/dotenvConfig";
+import { config } from "../config/config";
+import { Payload } from "../types/paystackTypes";
 
-export async function fetchTransactionData(settings: any) {
-  console.log("Fetching transaction data based on settings:", settings);
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        transactions: [
-          { id: 1, status: "success", amount: 1000 },
-          { id: 2, status: "failed", amount: 500 },
-        ],
-      });
-    }, 2000); // Simulate a 2-second delay for fetching data
-  });
-}
-
-// Function to send the processed data back to Telex via the return_url
-export async function sendNotificationToTelex(data: any, returnUrl: string) {
+const handleError = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "An unknown error occurred";
+};
+export const verifyPayment = async (reference: string) => {
   try {
-    const payload = {
-      channel_id: data.channel_id,
-      event_name: data.event_name,
-      status: data.status,
-      username: data.username,
-      data: data.data,
-      return_url: data.return_url,
-      settings: data.settings,
-    };
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${config.PAYSTACK_SECRET_KEY}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error: unknown) {
+    throw new Error(`Error verifying payment: ${handleError(error)}`);
+  }
+};
 
-    // Send POST request to Telex return URL
-    const response = await axios.post(returnUrl, payload, {
+export const sendResultToReturnUrl = async (
+  returnUrl: string,
+  result: object
+) => {
+  try {
+    await axios.post(returnUrl, result, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-
-    console.log("Notification sent to Telex return URL:", response.data);
-  } catch (error) {
-    console.error("Error sending notification to Telex:", error);
+  } catch (error: unknown) {
+    throw new Error(`Error verifying payment: ${handleError(error)}`);
   }
-}
+};

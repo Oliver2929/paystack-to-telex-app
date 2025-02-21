@@ -1,19 +1,26 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
+import { config } from "./config/config";
 import { getIntegrationJson } from "./config/telexConfig";
-import { handleTelexRequest } from "./controllers/paystackController";
+import paystackRoutes from "./routes/paystackRoute";
 
 const app = express();
-const port = 3000;
 
 app.use(cors());
 
 app.use(express.json());
 
-app.post("/paystack-payments", handleTelexRequest);
+app.use("/paystack", paystackRoutes);
 
 app.get("/integration.json", getIntegrationJson);
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+app._router.stack.forEach((route: any) => {
+  if (route.route) {
+    console.log(route.route.path);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
